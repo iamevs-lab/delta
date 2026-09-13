@@ -189,3 +189,136 @@ Hashing has a cost. The engine measures hashing time so we can study when provin
 
 ---
 
+## Limitations
+
+Honest ones, up front:
+
+- Incremental is not always faster. High fanout, global symbols, and huge pastes can make incremental *worse*. That is a research result, not a failure to hide.
+- Persistence across process restarts is designed but not required for the MVP. In-memory correctness comes first.
+- Parallel recomputation is designed, not enabled. Execution is single-threaded and deterministic until correctness and benches exist.
+- Fingerprints are optional and cost-accounted. They are not a magic cache key.
+- The toy language used for lexer/parser experiments is not a real programming language.
+- Neovim is an adapter. Installing the plugin without building the Rust CLI does nothing useful.
+
+---
+
+
+
+## Quick start
+
+
+
+### Prerequisites
+
+- Rust stable (1.85+; CI uses the latest stable)
+- Neovim 0.9+ if you want the editor laboratory
+
+
+
+### Build, test, benchmark
+
+```bash
+git clone https://github.com/iamevs-lab/delta.git
+cd delta
+cargo test --workspace
+cargo run -p delta-cli -- --help
+cargo run -p delta-cli -- benchmark --workload text-smoke --out benchmarks/results
+cargo run --release -p delta-cli -- benchmark --workload text-smoke --out benchmarks/results
+
+
+# build 
+cargo build 
+
+# Direct Install
+./scripts/install-nvim.ps1 # for windows
+./scripts/install-nvim.sh # for mac/linux
+```
+
+- For more runs refer `/scripts/*`
+
+
+### Neovim (lazy.nvim)
+
+`cargo build --release -p delta-cli` also copies the CLI and plugin to `~/.evs-delta` (no extra install step). Point lazy.nvim at that home path:
+
+```lua
+{
+  name = "delta.nvim",
+  dir = vim.fn.expand("~/.evs-delta/delta.nvim"),
+  lazy = false,
+  opts = {
+    cmd = { vim.fn.expand("~/.evs-delta/bin/delta-cli.exe"), "serve" },
+  },
+}
+```
+
+On Unix the binary is `~/.evs-delta/bin/delta-cli`. Rebuild `delta-cli` after CLI or plugin changes.
+
+
+---
+
+## Experiments
+
+Each experiment is a hypothesis with a baseline, a delta approach, and a place for measured results.
+
+
+| #   | Question                                        | Log                                                                |
+| --- | ----------------------------------------------- | ------------------------------------------------------------------ |
+| 001 | Do local text edits avoid whole-buffer copies?  | [experiments/001-text.md](experiments/001-text.md)                 |
+| 002 | Can a lexer retokenize only the dirty region?   | [experiments/002-lexer.md](experiments/002-lexer.md)               |
+| 003 | Can an AST reuse nodes outside the edit?        | [experiments/003-parser.md](experiments/003-parser.md)             |
+| 004 | Do symbol dependencies propagate correctly?     | [experiments/004-dependencies.md](experiments/004-dependencies.md) |
+| 005 | Can diagnostics recompute only affected checks? | [experiments/005-diagnostics.md](experiments/005-diagnostics.md)   |
+| 006 | Search as incremental computation               | [experiments/006-search.md](experiments/006-search.md)             |
+| 007 | Neovim as a live laboratory                     | [experiments/007-neovim.md](experiments/007-neovim.md)             |
+| 008 | Benchmark methodology                           | [experiments/008-benchmark.md](experiments/008-benchmark.md)       |
+| 009 | Runtime policy and adaptive choice              | [experiments/009-runtime.md](experiments/009-runtime.md)           |
+| 010 | When is Delta worse?                            | [experiments/010-break-it.md](experiments/010-break-it.md)         |
+
+
+---
+
+
+## Roadmap
+
+Phased. A later phase does not start until the previous one is correct and tested.
+
+
+| Phase | Focus                                | Status                               |
+| ----- | ------------------------------------ | ------------------------------------ |
+| 0     | Workspace, CI, docs, bench harness   | done                                 |
+| 1     | Delta primitives                     | done                                 |
+| 2     | State, versions, fingerprints        | done                                 |
+| 3     | Dependency graph + invalidation      | done                                 |
+| 4     | Runtime: full + incremental + policy | done                                 |
+| 5     | Incremental text experiment          | done (oracle-tested)                 |
+| 6     | Incremental lexer                    | done (falls back if ≠ full)          |
+| 7     | Incremental parser                   | done (falls back if ≠ full)          |
+| 8     | Symbols                              | done (incremental attempt + oracle)  |
+| 9     | Diagnostics                          | done (incremental attempt + oracle)  |
+| 10    | Neovim adapter                       | present; interactive measurement TBD |
+| 11    | Adaptive recomputation               | heuristic present; unmeasured        |
+| 12    | Replayable experiments               | CLI present                          |
+| 13    | Advanced / adversarial benches       | workloads present; most sizes TBD    |
+| 14    | Persistence layer                    | later                                |
+| 15    | Parallel scheduler                   | later                                |
+
+
+---
+
+
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+The useful contributions are: correctness tests, measured benchmarks, failure cases, and smaller APIs.
+The useless contributions are: unmeasured speed claims.
+
+---
+
+
+
+## License
+
+MIT. See [LICENSE](LICENSE).

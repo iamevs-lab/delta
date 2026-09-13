@@ -1,4 +1,4 @@
-# Contributing to EVS Delta
+# Contributing to Delta
 
 This is a systems research repository. The useful unit of work is a measured experiment, not a larger feature surface.
 
