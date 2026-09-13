@@ -1,0 +1,13 @@
+[package]
+name = "delta-bench"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Reproducible full-vs-incremental benchmark harness."
+
+[dependencies]
+delta-core = { workspace = true }
+delta-text = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

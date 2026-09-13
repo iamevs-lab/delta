@@ -1,0 +1,11 @@
+[package]
+name = "delta-graph"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Dependency graph, invalidation, and topological scheduling."
+
+[dependencies]
+delta-core = { workspace = true }
+serde = { workspace = true }

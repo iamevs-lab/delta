@@ -1,0 +1,39 @@
+# Rust
+/target/
+/target-nvim/
+**/*.rs.bk
+
+# Benchmark outputs (keep fixtures; ignore generated runs)
+/benchmarks/results/*.json
+!/benchmarks/results/.gitkeep
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Local env
+.env
+.env.*
+
+# Coverage / profiling
+*.profraw
+*.profdata
+/coverage/
+/perf.data*
+
+# Neovim local state
+neovim/**/doc/tags
+
+# proptest
+**/proptest-regressions/
+
+## benchmarks
+benchmarks/

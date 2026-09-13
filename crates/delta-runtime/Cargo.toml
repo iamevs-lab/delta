@@ -1,0 +1,13 @@
+[package]
+name = "delta-runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Incremental computation engine: scheduler, policy, metrics."
+
+[dependencies]
+delta-core = { workspace = true }
+delta-graph = { workspace = true }
+delta-store = { workspace = true }
+serde = { workspace = true }

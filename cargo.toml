@@ -1,0 +1,53 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/delta-core",
+    "crates/delta-graph",
+    "crates/delta-store",
+    "crates/delta-runtime",
+    "crates/delta-text",
+    "crates/delta-bench",
+    "crates/delta-cli",
+]
+default-members = [
+    "crates/delta-core",
+    "crates/delta-graph",
+    "crates/delta-store",
+    "crates/delta-runtime",
+    "crates/delta-text",
+    "crates/delta-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+rust-version = "1.85"
+authors = ["iamevs"]
+description = "An experimental incremental computation engine for software that changes continuously."
+repository = "https://github.com/iamevs-lab/delta"
+homepage = "https://github.com/iamevs-lab/delta"
+keywords = ["incremental", "computation", "research", "delta"]
+categories = ["compilers", "development-tools"]
+
+[workspace.dependencies]
+delta-core = { path = "crates/delta-core", version = "0.1.0" }
+delta-graph = { path = "crates/delta-graph", version = "0.1.0" }
+delta-store = { path = "crates/delta-store", version = "0.1.0" }
+delta-runtime = { path = "crates/delta-runtime", version = "0.1.0" }
+delta-text = { path = "crates/delta-text", version = "0.1.0" }
+delta-bench = { path = "crates/delta-bench", version = "0.1.0" }
+thiserror = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+clap = { version = "4", features = ["derive"] }
+proptest = "1"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+
+[profile.bench]
+lto = "thin"
+codegen-units = 1
+
